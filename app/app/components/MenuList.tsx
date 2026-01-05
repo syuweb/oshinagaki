@@ -2,22 +2,12 @@
 "use client";
 
 import { useState } from "react";
-import CategoryTabs from "./CategoryTabs";
-//import { menuItems } from "../data/menu";
-import MenuItem from "./MenuItem";
-
-type Item = {
-    id: string;
-    name: string;
-    category: string;
-    description: string;
-    image: string;
-    lastEaten?: string;
-    ratings?: { name: string; score: number }[];
-};
+import CategoryTabs from "@/components/CategoryTabs";
+import MenuItem from "@/components/MenuItem";
+import type { ItemDoc } from "@/lib/item";
 
 interface MenuListProps {
-    items: Item[];
+    items: ItemDoc[];
 }
 
 export default function MenuList({ items }: MenuListProps) {

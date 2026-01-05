@@ -1,9 +1,5 @@
-//import Image from "next/image";
-//import Link from "next/link";
-//import { notFound } from "next/navigation";
-//import { menuItems } from "../../data/menu";
-import { getItems } from "../../../src/lib/items";
-import MenuDetail from "../../components/MenuDetail"; // Client Component
+import { getItems } from "@/lib/items";
+import MenuDetail from "@/components/MenuDetail"; // Client Component
 
 type PageProps = {
     params: Promise<{ id: string }>

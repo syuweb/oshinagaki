@@ -3,17 +3,10 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import type { ItemDoc } from "@/lib/item";
 
 interface MenuItemProps {
-    item: {
-        id: string;
-        name: string;
-        category: string;
-        description: string;
-        image: string;
-        lastEaten?: string;
-        ratings?: { name: string; score: number }[];
-    };
+    item: ItemDoc;
 }
 
 export default function MenuDetail({ item }: MenuItemProps) {
