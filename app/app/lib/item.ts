@@ -1,5 +1,9 @@
+export const RATING_NAMES = ["かずみ", "しゅう", "ゆうた"] as const;
+
+export type RatingName = (typeof RATING_NAMES)[number];
+
 export type Rating = {
-    name: string;
+    name: RatingName;
     score: number;
 };
 
@@ -7,9 +11,14 @@ export type Rating = {
 export type ItemDoc = {
     id: string;
     name: string;
-    category: string;
-    description: string;
-    image: string;
+    category?: string;
+    description?: string;
+
+    image?: {
+        url: string;
+        publicId: string;
+    };
+
     lastEaten?: string;
     ratings?: Rating[];
 };
