@@ -5,13 +5,17 @@ import Link from "next/link";
 import type { ItemDoc, Rating, RatingName } from "@/lib/item";
 import { RATING_NAMES } from "@/lib/item";
 import { useState } from "react";
-import { saveRating } from "@/lib/items";
+import { saveRating, uploadToCloudinary } from "@/lib/items";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
+import { deleteFromCloudinary } from "@/lib/cloudinary";
+import { useRouter } from "next/navigation";
 
 interface MenuItemProps {
     item: ItemDoc;
 }
+
+export const dynamic = "force-dynamic";
 
 export default function MenuDetail({ item }: MenuItemProps) {
     /*
@@ -75,6 +79,28 @@ export default function MenuDetail({ item }: MenuItemProps) {
         await updateDoc(ref, data);
     };
 
+    async function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        if (item.image?.publicId) {
+            await deleteFromCloudinary(item.image.publicId);
+        }
+
+        const { imageUrl, imagePublicId } = await uploadToCloudinary(file);
+
+        await updateItem({
+            image: {
+                url: imageUrl,
+                publicId: imagePublicId,
+            },
+        });
+
+        router.refresh();
+    }
+
+    const router = useRouter();
+
     return <div>
         <header>
             <Link href="/">← 一覧に戻る</Link>
@@ -89,6 +115,11 @@ export default function MenuDetail({ item }: MenuItemProps) {
                     width={150} height={150}
                 />
             )}
+            <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+            />
 
             {/* 基本情報 */}
             <div className="space-y-1">

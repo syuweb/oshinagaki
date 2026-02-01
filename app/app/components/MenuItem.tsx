@@ -67,10 +67,23 @@ export default function MenuItem({ item, checked, onToggle }: Props) {
         <div className="flex-1">
           <p className="font-medium text-sm">{item.name}</p>
           
-          {item.ratings?.[0] && (
+          {/*item.ratings?.[0] && (
             <p className="text-xs text-yellow-600 leading-none">
             {renderStars(item.ratings[0].score)}
             </p>
+          )*/}
+
+          {/* 評価（一覧用） */}
+          {item.ratings && item.ratings.length > 0 && (
+            <div className="flex gap-4 mt-1">
+              {item.ratings.map((r, i) => (
+                <div key={i} className="flex items-center gap-1 text-xs text-yellow-600 leading-none">
+                  <span>
+                    {renderStars(r.score)}
+                  </span>
+                </div>
+              ))}
+            </div>
           )}
 
           {item.lastEaten && (
