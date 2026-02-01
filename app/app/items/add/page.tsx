@@ -1,10 +1,11 @@
 "use client";
 
 //import { addItemAction } from "@/lib/actions";
-import { addItem, uploadToCloudinary } from "@/lib/items"
+import { addItem } from "@/lib/items"
 import { useRouter } from "next/navigation";
 import type { ItemDoc } from "@/lib/item";
 import { useState } from "react";
+import { uploadToCloudinary } from "@/lib/items";
 
 export const dynamic = "force-dynamic";
 
@@ -39,10 +40,10 @@ export default function AddItemPage() {
 
         const file = formData.get("image") as File | null;
         if (file && file.size > 0) {
-            const { imageUrl, imagePublicId } = await uploadToCloudinary(file);
+            const { url, publicId } = await uploadToCloudinary(file);
             item.image = {
-                url: imageUrl,
-                publicId: imagePublicId,
+                url: url,
+                publicId: publicId,
             };
         }
 

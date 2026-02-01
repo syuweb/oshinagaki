@@ -1,6 +1,4 @@
 import { doc, collection, getDocs, getDoc, addDoc, deleteDoc, updateDoc } from "firebase/firestore";
-//import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { deleteFromCloudinary } from "./cloudinary";
 import { db } from "@/lib/firebase";
 import type { ItemDoc, Rating, RatingName } from "@/lib/item";
 import { RATING_NAMES } from "@/lib/item";
@@ -34,58 +32,6 @@ export async function addItem(
     await addDoc(collection(db, "items"), item);
 }
 
-//const storage = getStorage();
-
-//export async function uploadImage(file: File): Promise<string> {
-//    const storageRef = ref(storage, `items/${file.name}`);
-//    await uploadBytes(storageRef, file);
-//    const url = await getDownloadURL(storageRef);
-//    return url;
-//}
-
-export type UploadResult = {
-    imageUrl: string;
-    imagePublicId: string;
-};
-
-export async function uploadToCloudinary(file: File): Promise<UploadResult> {
-    const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME!;
-    const uploadPreset = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET!;
-
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("upload_preset", uploadPreset);
-    formData.append("folder", "oshinagaki/items");
-
-    const res = await fetch(
-        `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
-        {
-            method: "POST",
-            body: formData,
-        }
-    );
-
-    if (!res.ok) {
-        const errorText = await res.text();
-        console.error("Cloudinary error:", res.status, errorText);
-        throw new Error(`Cloudinary upload failed: ${res.status} ${errorText}`);
-        //throw new Error("Cloudinary upload failed");
-    }
-
-    const data = await res.json();
-    return {
-        imageUrl: data.secure_url,
-        imagePublicId: data.public_id,
-    };
-}
-
-/*
-export async function deleteFromCloudinary(publicId: string) {
-    const result = await cloudinary.uploader.destroy(publicId);
-    console.log(result); // { result: 'ok' } が成功
-}
-*/
-
 export async function deleteItem(itemId: string) {
     const ref = doc(db, "items", itemId);
     const snap = await getDoc(ref);
@@ -93,8 +39,15 @@ export async function deleteItem(itemId: string) {
     if (!snap.exists()) return;
 
     const data = snap.data();
-    if (data.imagePublicId) {
-        await deleteFromCloudinary(data.imagePublicId);
+    if (data.image?.publicId) {
+        console.log("delete cloudinary:", data.image.publicId);
+        await fetch("/api/cloudinary/delete", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                publicId: data.image.publicId,
+            }),
+        });
     }
 
     await deleteDoc(ref);
@@ -124,21 +77,18 @@ export async function saveRating(
     });
 }
 
-/*
-export async function saveRating(
-    itemId: string,
-    ratingName: string,
-    score: number
-) {
-    const ref = doc(db, "items", itemId);
+export async function uploadToCloudinary(file: File) {
+    const formData = new FormData();
+    formData.append("file", file);
 
-    await updateDoc(ref, {
-        ratings: [
-            {
-                name: ratingName,
-                score,
-            },
-        ],
+    const res = await fetch("/api/cloudinary/upload", {
+        method: "POST",
+        body: formData,
     });
+
+    if (!res.ok) {
+        throw new Error("Upload failed");
+    }
+
+    return res.json();
 }
-*/

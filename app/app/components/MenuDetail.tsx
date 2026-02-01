@@ -8,7 +8,6 @@ import { useState } from "react";
 import { saveRating, uploadToCloudinary } from "@/lib/items";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
-import { deleteFromCloudinary } from "@/lib/cloudinary";
 import { useRouter } from "next/navigation";
 
 interface MenuItemProps {
@@ -82,15 +81,21 @@ export default function MenuDetail({ item }: MenuItemProps) {
         if (!file) return;
 
         if (item.image?.publicId) {
-            await deleteFromCloudinary(item.image.publicId);
+            await fetch("/api/cloudinary/delete", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    publicId: item.image.publicId,
+                }),
+            });
         }
 
-        const { imageUrl, imagePublicId } = await uploadToCloudinary(file);
+        const { url, publicId } = await uploadToCloudinary(file);
 
         await updateItem({
             image: {
-                url: imageUrl,
-                publicId: imagePublicId,
+                url,
+                publicId,
             },
         });
 
