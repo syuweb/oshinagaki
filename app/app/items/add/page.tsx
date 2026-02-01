@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 import type { ItemDoc } from "@/lib/item";
 import { useState } from "react";
 
+export const dynamic = "force-dynamic";
+
 export default function AddItemPage() {
     const router = useRouter();
     const [error, setError] = useState<string | null>(null);

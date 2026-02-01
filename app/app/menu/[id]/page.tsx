@@ -1,6 +1,8 @@
 import { getItems } from "@/lib/items";
 import MenuDetail from "@/components/MenuDetail"; // Client Component
 
+export const dynamic = "force-dynamic";
+
 type PageProps = {
     params: Promise<{ id: string }>
 };

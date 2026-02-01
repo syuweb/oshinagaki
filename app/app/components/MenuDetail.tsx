@@ -15,8 +15,6 @@ interface MenuItemProps {
     item: ItemDoc;
 }
 
-export const dynamic = "force-dynamic";
-
 export default function MenuDetail({ item }: MenuItemProps) {
     /*
     const [score, setScore] = useState(
