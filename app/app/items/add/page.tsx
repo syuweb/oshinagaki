@@ -40,7 +40,9 @@ export default function AddItemPage() {
 
         const file = formData.get("image") as File | null;
         if (file && file.size > 0) {
+            console.log('[API] before uploadToCloudinary');
             const { url, publicId } = await uploadToCloudinary(file);
+            console.log('[API] after uploadToCloudinary');
             item.image = {
                 url: url,
                 publicId: publicId,

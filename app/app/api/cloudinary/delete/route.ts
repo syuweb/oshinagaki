@@ -8,6 +8,8 @@ cloudinary.config({
 });
 
 export async function POST(req: Request) {
+    console.log('[API] upload start');
+
     const { publicId } = await req.json();
 
     if (!publicId) {

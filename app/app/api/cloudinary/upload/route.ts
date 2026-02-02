@@ -15,6 +15,8 @@ type CloudinaryUploadResult = {
 };
 
 export async function POST(req: Request) {
+  console.log('[API] upload start');
+
   const formData = await req.formData();
   const file = formData.get("file");
 

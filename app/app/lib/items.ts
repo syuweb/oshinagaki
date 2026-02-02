@@ -40,7 +40,7 @@ export async function deleteItem(itemId: string) {
 
     const data = snap.data();
     if (data.image?.publicId) {
-        console.log("delete cloudinary:", data.image.publicId);
+        console.log("before delete cloudinary:", data.image.publicId);
         await fetch("/api/cloudinary/delete", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -48,6 +48,7 @@ export async function deleteItem(itemId: string) {
                 publicId: data.image.publicId,
             }),
         });
+        console.log("after delete cloudinary:", data.image.publicId);
     }
 
     await deleteDoc(ref);

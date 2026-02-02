@@ -90,7 +90,9 @@ export default function MenuDetail({ item }: MenuItemProps) {
             });
         }
 
+        console.log('[API] before uploadToCloudinary');
         const { url, publicId } = await uploadToCloudinary(file);
+        console.log('[API] after uploadToCloudinary');
 
         await updateItem({
             image: {
