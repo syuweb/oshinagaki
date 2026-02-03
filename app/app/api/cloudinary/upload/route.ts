@@ -15,6 +15,11 @@ type CloudinaryUploadResult = {
 };
 
 export async function POST(req: Request) {
+  console.log("cloudinary env", {
+    name: !!process.env.CLOUDINARY_CLOUD_NAME,
+    key: !!process.env.CLOUDINARY_API_KEY,
+    secret: !!process.env.CLOUDINARY_API_SECRET,
+  });
   console.log('[API] upload start');
 
   const formData = await req.formData();
