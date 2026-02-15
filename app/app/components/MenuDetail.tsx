@@ -4,17 +4,38 @@ import Image from "next/image";
 import Link from "next/link";
 import type { ItemDoc, Rating, RatingName } from "@/lib/item";
 import { RATING_NAMES } from "@/lib/item";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { saveRating, uploadToCloudinary } from "@/lib/items";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { useRouter } from "next/navigation";
+import { CategorySelect } from "@/components/CategorySelect"
+import { getItems } from "@/lib/items"
 
 interface MenuItemProps {
     item: ItemDoc;
 }
 
+//const items = await getItems();
+
 export default function MenuDetail({ item }: MenuItemProps) {
+    const [existingCategories, setExistingCategories] = useState<string[]>([]);
+
+    useEffect(() => {
+        getItems().then((items) => {
+            const cats = Array.from(
+                new Set(
+                    items
+                        .map(i => i.category)
+                        .filter((c): c is string =>
+                            typeof c === "string" && c.length > 0
+                        )
+                )
+            );
+            setExistingCategories(cats);
+        });
+    }, []);
+
     /*
     const [score, setScore] = useState(
         item.ratings?.[0]?.score ?? 0
@@ -106,6 +127,16 @@ export default function MenuDetail({ item }: MenuItemProps) {
 
     const router = useRouter();
 
+    /*
+        const existingCategories = Array.from(
+            new Set(
+                items
+                    .map(i => i.category)
+                    .filter((c): c is string => typeof c === "string" && c.length > 0)
+            )
+        );
+        */
+
     return <div>
         <header>
             <Link href="/">← 一覧に戻る</Link>
@@ -141,9 +172,20 @@ export default function MenuDetail({ item }: MenuItemProps) {
                 />
             </div>
 
+
             <div className="space-y-1">
                 <label className="text-sm font-medium">カテゴリー</label>
-                <input
+                <CategorySelect
+                    value={category}
+                    onChange={(v) => {
+                        setCategory(v);
+                        updateItem({
+                            category: v.trim() || undefined,
+                        });
+                    }}
+                    existingCategories={existingCategories}
+                />
+                {/*<input
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
                     onBlur={() =>
@@ -152,7 +194,7 @@ export default function MenuDetail({ item }: MenuItemProps) {
                         })
                     }
                     className="w-full border rounded px-2 py-1 text-sm"
-                />
+                />*/}
             </div>
 
             {/* 最後に食べた日 */}
@@ -215,6 +257,7 @@ export function StarRating({ score, onChange }: StarRatingProps) {
                 <button
                     key={v}
                     onClick={() => onChange(v)}
+                    className="min-h-[44px]"
                 >
                     {v <= score ? "★" : "☆"}
                 </button>
@@ -238,7 +281,7 @@ function StarRating({
                     key={v}
                     type="button"
                     onClick={() => onChange(v)}
-                    className="text-2xl"
+                    className="text-2xl min-h-[44px]"
                 >
                     {v <= score ? "★" : "☆"}
                 </button>

@@ -1,12 +1,14 @@
 "use client";
 
-import Link from "next/link";
+//import Link from "next/link";
 import { useState } from "react";
 import CategoryTabs from "@/components/CategoryTabs";
 import MenuItem from "@/components/MenuItem";
 import type { ItemDoc } from "@/lib/item";
 import { deleteItem } from "@/lib/items"
 import { useRouter } from "next/navigation";
+//import Button from "@/components/Button"
+import { TopBar, TopBarMode } from "@/components/TopBar"
 
 interface MenuListProps {
   items: ItemDoc[];
@@ -38,15 +40,27 @@ export default function MenuList({ items }: MenuListProps) {
   );
 
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const allIds = items.map(i => i.id);
 
-  const toggleSelect = (id: string) => {
-    setSelectedIds((prev) =>
-      prev.includes(id)
-        ? prev.filter((v) => v !== id)
-        : [...prev, id]
-    );
+  const toggleSelectAll = () => {
+    if (isAllSelected) {
+      // 全解除
+      setSelectedIds([]);
+    } else {
+      // 全選択
+      setSelectedIds(allIds);
+    }
   };
 
+  /*
+    const toggleSelect = (id: string) => {
+      setSelectedIds((prev) =>
+        prev.includes(id)
+          ? prev.filter((v) => v !== id)
+          : [...prev, id]
+      );
+    };
+  */
   const router = useRouter();
 
   const handleDeleteSelected = async () => {
@@ -70,27 +84,57 @@ export default function MenuList({ items }: MenuListProps) {
     }
 
     setSelectedIds([]);
+    setMode("normal");
     router.refresh();
   };
 
+
+  //const isAllSelected = false;
+  //const canDelete = selectedIds.length > 0;
+  const [mode, setMode] = useState<TopBarMode>("normal");
+
+  const selectedCount = selectedIds.length;
+
+  const title =
+    mode === "edit"
+      ? selectedCount === 0
+        ? "選択"
+        : `${selectedCount}件選択中`
+      : "メニュー";
+
+  const totalCount = items.length;
+
+  const isAllSelected =
+    totalCount > 0 && selectedCount === totalCount;
+
+  const isIndeterminate =
+    selectedCount > 0 && selectedCount < totalCount;
+
   return (
     <div>
-      <div className="flex items-center gap-3 mb-4">
-        <Link href="/items/add">
-          <button className="px-3 py-2 text-sm rounded bg-blue-500 text-white">
-            追加
-          </button>
-        </Link>
+      <TopBar
+        title={title}
+        mode={mode}
 
-        <button
-          disabled={selectedIds.length === 0}
-          onClick={handleDeleteSelected}
-          className="px-3 py-2 text-sm rounded bg-red-500 text-white disabled:opacity-40"
-        >
+        /* normal */
+        onOpenMenu={() => console.log("menu")}
+        onAdd={() => router.push("/items/add")}
+        onOpenOptions={() => {
+          setSelectedIds([]);
+          setMode("edit");
+        }}
 
-          選択した {selectedIds.length} 件を削除
-        </button>
-      </div>
+        /* edit */
+        isIndeterminate={isIndeterminate}
+        isAllSelected={isAllSelected}
+        onToggleAll={toggleSelectAll}
+        canDelete={selectedIds.length > 0}
+        onDelete={handleDeleteSelected}
+        onCancelEdit={() => {
+          setMode("normal");
+          setSelectedIds([]);
+        }}
+      />
 
       <div className="mb-4">
         <CategoryTabs
@@ -117,10 +161,16 @@ export default function MenuList({ items }: MenuListProps) {
           <MenuItem
             key={item.id}
             item={item}
+            isEditing={mode === "edit"}
             checked={selectedIds.includes(item.id)}
-            onToggle={toggleSelect}
+            onToggle={(id) => {
+              setSelectedIds(prev =>
+                prev.includes(id)
+                  ? prev.filter(x => x !== id)
+                  : [...prev, id]
+              );
+            }}
           />
-          //<MenuItem key={item.id} item={item} />
         ))}
       </div>
     </div>
