@@ -112,11 +112,11 @@ export default function MenuList({ items }: MenuListProps) {
 
   return (
     <div>
+      {/*
       <TopBar
         title={title}
         mode={mode}
 
-        /* normal */
         onOpenMenu={() => console.log("menu")}
         onAdd={() => router.push("/items/add")}
         onOpenOptions={() => {
@@ -124,7 +124,6 @@ export default function MenuList({ items }: MenuListProps) {
           setMode("edit");
         }}
 
-        /* edit */
         isIndeterminate={isIndeterminate}
         isAllSelected={isAllSelected}
         onToggleAll={toggleSelectAll}
@@ -135,6 +134,7 @@ export default function MenuList({ items }: MenuListProps) {
           setSelectedIds([]);
         }}
       />
+      */}
 
       <div className="mb-4">
         <CategoryTabs

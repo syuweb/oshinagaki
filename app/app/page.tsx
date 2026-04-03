@@ -1,4 +1,13 @@
-// app/page.tsx
+import { redirect } from "next/navigation";
+
+export default function Page() {
+  redirect("/foodlist");
+
+  return null;
+}
+
+
+/*
 import MenuList from "@/components/MenuList"; // Client Component
 import { getItems } from "@/lib/items";
 import AppContainer from "@/components/AppContainer"
@@ -13,3 +22,4 @@ export default async function Page() {
     </AppContainer>
   );
 }
+*/

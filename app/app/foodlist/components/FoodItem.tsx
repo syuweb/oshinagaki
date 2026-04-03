@@ -1,0 +1,116 @@
+"use client"
+// Foodlistの一覧表示内の個々の項目を表示
+
+import Image from "next/image";
+import { useRouter } from "next/navigation"
+import type { ItemDoc } from "@/lib/item";
+
+type props = {
+    item: ItemDoc;
+}
+
+export default function FoodItem({ item }: props) {
+    // router使用
+    const router = useRouter();
+
+    // 評価を★で表示
+    const renderStars = (value: number) =>
+        "★★★★★☆☆☆☆☆".slice(5 - value, 10 - value);
+
+    return (
+        <button
+            onClick={() => router.push(`/foodlist/detail/${item.id}`)}
+            className="
+                w-full                  // 横幅いっぱい
+                h-[var(--item-height)]  // 高さ指定
+                flex                    // 中身をflexboxレイアウトにする
+                items-center            // 縦方向中央揃え
+                px-1                    // 横方向パディング4px
+                gap-1                   // 要素間のギャップ4px
+            "
+        >
+            {/* 画像 */}
+            {item.image?.url ? (
+                <Image
+                    src={item.image.url}    // 画像URL指定
+                    alt={item.name}         // 読み上げ時のテキスト
+                    className="
+                        h-[var(--item-height)] // 画像表示の高さ指定
+                        w-[var(--item-height)] // 画像表示の幅指定
+                        rounded                     // 角を丸くする
+                        object-cover                // アスペクト比を保って大きく表示
+                    "
+                    width={150}     // 画像実サイズの高さ指定（必須）
+                    height={150}    // 画像実サイズの幅指定（必須）
+                />
+            ) : (
+                <div
+                    className="
+                        h-[var(--item-height)]     // 画像表示の高さ指定
+                        w-[var(--item-height)]     // 画像表示の幅指定
+                        flex                            // 中身をflexboxレイアウトにする
+                        items-center                    // 縦方向中央揃え
+                        justify-center                  // 横方向中央揃え
+                        bg-[var(--grayout-color)]       // 背景色を指定
+                        rounded                         // 角を丸くする
+                        leading-none                   // 改行幅を小さく
+                    "
+                >
+                    No<br />Image
+                </div>
+            )}
+
+            {/* テキスト部分 */}
+            <div
+                className="
+                    flex flex-col   // flexboxレイアウトにして縦に並べる
+                "
+            >
+                {/* タイトル */}
+                <div
+                    className="
+                        text-left   // テキスト左揃え
+                    "
+                >
+                    {item.name}
+                </div>
+
+                {/* 最後に食べた日 */}
+                {item.lastEaten && (
+                    <div
+                        className="
+                            text-left   // テキスト左揃え
+                            text-xs     // テキストサイズ小
+                        "
+                    >
+                        最後に食べた日: {item.lastEaten}
+                    </div>
+                )}
+
+                {/* 評価 */}
+                {item.ratings && item.ratings.length > 0 && (
+                    <div
+                        className="
+                            flex        // 中身をflexboxレイアウトにする
+                            text-left   // テキスト左揃え
+                            text-xs     // テキストサイズ小
+                            gap-3       // 評価間のギャップ
+                        "
+                    >
+                        {item.ratings.map((r, i) => (
+                            <div
+                                key={i}
+                                className="
+                                    text-yellow-600
+                                "
+                            >
+                                {renderStars(r.score)}
+                            </div>
+                        ))}
+                    </div>
+                )}
+
+            </div>
+        </button>
+    );
+}
