@@ -25,7 +25,7 @@ export function TopBar() {
                 items-center                // 縦方向中央揃え
                 justify-between             // 中身を両端とその間に均等に配置
                 px-1                        // 左右パディング 0.25rem(4px)
-                z-30                        // z-index (他よりも全面に表示されやすい)
+                z-60                        // z-index (他よりも全面に表示されやすい)
             "
         >
             {/* 左 */}
@@ -51,8 +51,8 @@ export function TopBar() {
                             bg-[var(--half-color)]  // 背景色指定
                         "
                     >
-                        <SidemenuItem onClick={()=>{router.push(`/foodlist`);}}>食事リスト</SidemenuItem>
-                        <SidemenuItem onClick={()=>{router.push(`/dataedit`);}}>データ編集</SidemenuItem>
+                        <SidemenuItem onClick={() => { router.push(`/foodlist`); }}>食事リスト</SidemenuItem>
+                        <SidemenuItem onClick={() => { router.push(`/dataedit`); }}>データ編集</SidemenuItem>
                     </SidemenuMenu>
                 </Sidemenu>
             </div>

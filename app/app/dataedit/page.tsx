@@ -1,10 +1,10 @@
-import TopContainer from "./components/TopContainer";
+import { DataView } from "@/dataedit/components/DataView"
 
 export default async function Home() {
     return (
-        <TopContainer>
-            改築中
-        </TopContainer>
+        <div>
+            <DataView />
+        </div>
     );
 }
 

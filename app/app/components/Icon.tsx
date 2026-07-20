@@ -11,8 +11,8 @@
 
 type IconProps = {
     name: string;
-    size?: number;
-    className?: string;
+    size?: number;          // デフォルト：24
+    className?: string;     // デフォルト：""
 };
 
 export function Icon({ name, size = 24, className = "" }: IconProps) {

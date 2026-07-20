@@ -1,3 +1,20 @@
+/*
+    cloudinary POSTメソッド
+    ＜概要＞
+        画像データベース(cloudinary)への画像登録(POST)
+    ＜使い方＞
+        画像登録：
+          const res = await fetch("/api/cloudinary/upload", {
+            method: "POST",
+            body: formData,
+          });
+
+          res：戻り値（return res.json();）
+            url：登録後の画像へのアクセスURL（firestoreに格納）
+            publicId：登録した画像のID（firestoreに格納）
+          formData：登録する画像URL
+*/
+
 export const runtime = "nodejs";
 
 import { NextResponse } from "next/server";

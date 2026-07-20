@@ -1,32 +1,19 @@
-// FoodListの共通レイアウト（トップバー表示）
+/*
+    foodlist/layout.tsx
+    ＜概要＞
+        FoodListの共通レイアウト指定。
+        FoodListのプルダウンメニューを設定。
+    ＜使い方＞
+        自動で呼び出されるため使い方は不要。
+*/
 
 import React from "react";
-import { TitleProvider } from "@/components/Title";
-import { TopBar } from "./components/TopBar";
+import { AppProvider } from "@/foodlist/components/AppProvider"
 
-export default function FoodListLayout({
-    children,
-}: Readonly<{
-    children: React.ReactNode;
-}>) {
+export default function FoodListLayout({ children, }: Readonly<{ children: React.ReactNode; }>) {
     return (
-        <TitleProvider> {/* FoodListコンポーネント全体にタイトル名の取得・変更を許可 */}
-            <div
-                className="
-                    h-screen    //高さがスクリーン全体
-                "
-            >
-                <TopBar />  {/* トップバー表示 */}
-                <main
-                    className="
-                        pt-[var(--topbar-height)]   //トップバーと重ならないように画面上部をパディング
-                        h-full                      //高さは親コンポーネントの高さと同等
-                        overflow-auto               //スクロールバーは必要なときのみ表示
-                    "
-                >
-                    {children}
-                </main>
-            </div>
-        </TitleProvider>
+        <AppProvider>
+            {children}
+        </AppProvider>
     );
 }

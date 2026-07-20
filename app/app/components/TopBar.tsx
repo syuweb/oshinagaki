@@ -1,224 +1,125 @@
-"use client";
-
-import { Plus, Trash2, MoreHorizontal, Menu } from "lucide-react";
-import { IconButton } from "@/components/IconButton";
-import { useEffect, useRef } from "react";
-
-export type TopBarMode =
-  | "normal"
-  | "edit";
-
-type Props = {
-  title: string;
-  mode: TopBarMode;
-
-  // normal
-  onAdd?: () => void;
-  onOpenMenu?: () => void;
-  onOpenOptions?: () => void;
-
-  // edit
-  canDelete?: boolean;
-  isAllSelected?: boolean;
-  onToggleAll?: () => void;
-  onDelete?: () => void;
-  onCancelEdit?: () => void;
-  isIndeterminate?: boolean;
-};
-
-export function TopBar(props: Props) {
-  return (
-    <div className="sticky top-0 z-10 h-12 bg-white relative">
-      {renderByMode(props)}
-    </div>
-  );
-}
-
-function renderByMode(props: Props) {
-  switch (props.mode) {
-    case "normal":
-      return <NormalMode {...props} />;
-    case "edit":
-      return <EditMode {...props} />;
-    default:
-      return null;
-  }
-}
+"use client"
 
 /*
-function renderByMode(props: Props) {
-  switch (props.mode) {
-    case "normal":
-      return renderNormal(props);
-    case "edit":
-      return renderEdit(props);
-    default:
-      return null;
-  }
-}
+    トップバー
+    ＜概要＞
+        トップバーを実装する。
+        左にサイドメニュー、右にプルダウンメニューを表示するボタンを配置し、
+        中央にはタイトルを表示する。
+        サイドメニューの内容は固定だが、プルダウンメニュー、タイトルは変更可能。
+    ＜使い方＞
+        プルダウンメニュー設定：
+          MenuItems.tsx参照
+        タイトル設定：
+          Title.tsx参照
+        トップバー表示：
+          <TopBar />
 */
 
-function NormalMode(props: Props) {
-  return (
-    <>
-      {/* 左 */}
-      <div className="absolute left-0 top-0 h-full flex items-center">
-        <IconButton onClick={props.onOpenMenu}>
-          <Menu size={24} />
-        </IconButton>
-      </div>
+import { useRouter } from "next/navigation";
+import { Icon } from "@/components/Icon";
+import { Pulldown, PulldownButton, PulldownMenu, PulldownItem } from "@/components/Pulldown"
+import { Sidemenu, SidemenuButton, SidemenuMenu, SidemenuItem } from "@/components/Sidemenu"
+import { useGetTitle } from "@/components/Title"
+import { useGetMenuItems } from "@/components/MenuItems"
 
-      {/* 中央 */}
-      <div className="h-full flex items-center justify-center">
-        <div className="text-sm font-medium truncate">{props.title}</div>
-      </div>
+export function TopBar() {
+    const router = useRouter();
+    const title = useGetTitle();            //ページタイトルの取得
+    const menuItems = useGetMenuItems();    // メニューアイテムの取得
 
-      {/* 右 */}
-      <div className="absolute right-0 top-0 h-full flex items-center">
-        <IconButton onClick={props.onAdd}>
-          <Plus size={24} />
-        </IconButton>
-        <IconButton onClick={props.onOpenOptions}>
-          <MoreHorizontal size={24} />
-        </IconButton>
-      </div>
-    </>
-  );
-}
-
-function renderNormal({
-  title,
-  onOpenMenu,
-  onAdd,
-  onOpenOptions,
-}: Props) {
-  return (
-    <>
-      {/* 左 */}
-      <div className="absolute left-0 top-0 h-full flex items-center">
-        <IconButton onClick={onOpenMenu}>
-          <Menu size={24} />
-        </IconButton>
-      </div>
-
-      {/* 中央 */}
-      <div className="h-full flex items-center justify-center">
-        <div className="text-sm font-medium truncate">{title}</div>
-      </div>
-
-      {/* 右 */}
-      <div className="absolute right-0 top-0 h-full flex items-center">
-        <IconButton onClick={onAdd}>
-          <Plus size={24} />
-        </IconButton>
-        <IconButton onClick={onOpenOptions}>
-          <MoreHorizontal size={24} />
-        </IconButton>
-      </div>
-    </>
-  );
-}
-
-function renderEdit({
-  title,
-  isAllSelected,
-  onToggleAll,
-  canDelete,
-  onDelete,
-  onCancelEdit,
-  isIndeterminate,
-}: Props) {
-  //const checkboxRef = useRef<HTMLInputElement>(null);
-  /*
-    useEffect(() => {
-      if (checkboxRef.current) {
-        checkboxRef.current.indeterminate =
-          !!isIndeterminate;
-      }
-    }, [isIndeterminate]);
-  */
-
-  return (
-    <>
-      {/* 左：全選択 */}
-      <div className="absolute left-0 top-0 h-full flex items-center gap-2 px-2">
-        <input
-          //ref={checkboxRef}
-          type="checkbox"
-          checked={isAllSelected}
-          onChange={onToggleAll}
-        />
-        <span className="text-sm">全選択</span>
-      </div>
-
-      {/* 中央 */}
-      <div className="h-full flex items-center justify-center">
-        <div className="text-sm font-medium truncate">{title}</div>
-      </div>
-
-      {/* 右 */}
-      <div className="absolute right-0 top-0 h-full flex items-center">
-        <IconButton onClick={onDelete} disabled={!canDelete}>
-          <Trash2 size={24} />
-        </IconButton>
-
-        <button
-          onClick={onCancelEdit}
-          className="px-3 text-sm font-medium text-blue-600 min-h-[44px]"
+    return (
+        <div
+            className="
+                fixed                       // 画面基準で固定位置
+                top-0                       // 上端から0px
+                left-0                      // 左端から0px
+                right-0                     // 右端から0px
+                h-[var(--topbar-height)]    // 高さ指定
+                bg-[var(--hilight-color)]   // 背景色指定
+                border-b                    // 下側だけボーダーをつける
+                flex                        // 中身をflexboxレイアウトにする
+                items-center                // 縦方向中央揃え
+                justify-between             // 中身を両端とその間に均等に配置
+                px-1                        // 左右パディング 0.25rem(4px)
+                z-[60]                      // z-index
+            "
         >
-          キャンセル
-        </button>
-      </div>
-    </>
-  );
-}
+            {/* 左 */}
+            <div
+                className="
+                    flex            // 中身をflexboxレイアウトにする
+                    items-center    // 縦方向中央揃え
+                "
+            >
+                {/* サイドメニュー */}
+                <Sidemenu>
+                    <SidemenuButton
+                        className="
+                            h-[var(--topbar-height)]    // 高さをトップバーの高さに合わせる
+                            w-[var(--topbar-height)]    // 幅をトップバーの高さに合わせる
+                        "
+                    >
+                        <Icon name="menu" size={32} />    {/* 三本線アイコン */}
+                    </SidemenuButton>
 
-function EditMode(props: Props) {
-  const checkboxRef = useRef<HTMLInputElement>(null);
+                    {/* メニューアイテムの登録 */}
+                    <SidemenuMenu
+                        className="
+                            bg-[var(--half-color)]  // 背景色指定
+                        "
+                    >
+                        <SidemenuItem onClick={() => { router.push(`/foodlist`); }}>食事リスト</SidemenuItem>
+                        {/*<SidemenuItem onClick={() => { router.push(`/dataedit`); }}>データ編集</SidemenuItem>*/}
+                    </SidemenuMenu>
+                </Sidemenu>
+            </div>
 
-  useEffect(() => {
-    if (checkboxRef.current) {
-      checkboxRef.current.indeterminate =
-        !!props.isIndeterminate;
-    }
-  }, [props.isIndeterminate]);
+            {/* 中央 */}
+            <div
+                className="
+                    flex            // 中身をflexboxレイアウトにする
+                    items-center    // 縦方向中央揃え
+                    justify-center  // 横方向中央揃え
+                    font-medium     // フォントの太さを指定
+                "
+            >
+                {title}
+            </div>
 
-  return (
-    <>
-      {/* 左 */}
-      <div className="absolute left-0 top-0 h-full flex items-center gap-2 px-2">
-        <input
-          ref={checkboxRef}
-          type="checkbox"
-          checked={props.isAllSelected}
-          onChange={props.onToggleAll}
-        />
-        <span className="text-sm">全選択</span>
-      </div>
+            {/* 右 */}
+            <div
+                className="
+                    flex            // 中身をflexboxレイアウトにする
+                    items-center    // 縦方向中央揃え
+                    justify-center  // 横方向中央揃え
+                "
+            >
+                {/* プルダウンメニュー */}
+                <Pulldown>
+                    <PulldownButton
+                        className="
+                            h-[var(--topbar-height)]    // 高さをトップバーの高さに合わせる
+                            w-[var(--topbar-height)]    // 幅をトップバーの高さに合わせる
+                        "
+                    >
+                        <Icon name="more_horiz" size={32} />    {/* 三点リーダーアイコン */}
+                    </PulldownButton>
 
-      {/* 中央 */}
-      <div className="h-full flex items-center justify-center">
-        <div className="text-sm font-medium truncate">
-          {props.title}
+                    {/* メニューアイテムの登録 */}
+                    <PulldownMenu
+                        className="
+                            bg-[var(--half-color)]  // 背景色指定
+                        "
+                    >
+                        {menuItems.map((item, i) => (
+                            <PulldownItem key={i} onClick={item.onClick}>
+                                {item.name}
+                            </PulldownItem>
+                        ))}
+                    </PulldownMenu>
+                </Pulldown>
+            </div>
         </div>
-      </div>
-
-      {/* 右 */}
-      <div className="absolute right-0 top-0 h-full flex items-center">
-        <IconButton
-          onClick={props.onDelete}
-          disabled={!props.canDelete}
-        >
-          <Trash2 size={24} />
-        </IconButton>
-
-        <button
-          onClick={props.onCancelEdit}
-          className="px-3 text-sm font-medium text-blue-600 min-h-[44px]"
-        >
-          キャンセル
-        </button>
-      </div>
-    </>
-  );
+    );
 }

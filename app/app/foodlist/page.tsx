@@ -1,13 +1,24 @@
-import TopContainer from "./components/TopContainer";
-import FoodList from "./components/FoodList";
-import { getItems } from "./lib/items";
+/*
+    foodlist/page.tsx
+    ＜概要＞
+        FoodListのトップページ。
+        タイトルを「食べたものリスト」に設定。
+        食べたものリストを表示。
+    ＜使い方＞
+        自動で呼び出されるため使い方は不要。
+*/
 
-export default async function Home() {
-    const items = await getItems();
+import FoodList from "@/foodlist/components/FoodList";
+import { getItems2 } from "@/foodlist/lib/items2";
+import { SetTitle } from "@/components/Title";
+
+export default async function Home() {      // 中でawaitを使っているため、asyncにする
+    const items = await getItems2();         // データベースからの読み込みに時間がかかるため、awaitを指定
 
     return (
-        <TopContainer>
+        <>
+            <SetTitle title="食べたものリスト" />
             <FoodList items={items} />
-        </TopContainer>
+        </>
     );
 }

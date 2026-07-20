@@ -129,6 +129,7 @@ export function SidemenuMenu({ children, className }: SidemenuMenuProps) {
 
     return createPortal(    // コンポーネント構造はそのまま、描画位置だけ変える
         <>
+            {/* 開くメニューの裏にオーバレイを表示し、オーバレイをタップしたときにメニューを閉じる */}
             <Overlay
                 clickRef={blockNextClickRef}
                 open={setOpen}
@@ -143,7 +144,7 @@ export function SidemenuMenu({ children, className }: SidemenuMenuProps) {
                     w-[300px]                               // メニューの幅を300pxにする
                     h-[calc(100dvh-var(--topbar-height))]   // 高さ指定：画面100%からトップバーの高さを引く
                     bg-[var(--half-color)]                  // 背景色指定
-                    z-[60]                                  // Z位置を60に
+                    z-[100]                                 // Z位置を100に
                     shadow-lg                               // 影のサイズをlg(大き目)にする
                     ${className}
                 `}

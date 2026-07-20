@@ -1,25 +1,13 @@
+/*
+    page.tsx
+    ＜概要＞
+        アプリのトップページ。
+    ＜使い方＞
+        自動で呼び出されるため使い方は不要。
+*/
+
 import { redirect } from "next/navigation";
 
 export default function Page() {
-  redirect("/foodlist");
-
-  return null;
+  redirect("/foodlist");            // 当面はfoodlistだけを実装するため、foodlistにリダイレクト
 }
-
-
-/*
-import MenuList from "@/components/MenuList"; // Client Component
-import { getItems } from "@/lib/items";
-import AppContainer from "@/components/AppContainer"
-
-export const dynamic = "force-dynamic";
-
-export default async function Page() {
-  const items = await getItems();
-  return (
-    <AppContainer>
-      <MenuList items={items} />
-    </AppContainer>
-  );
-}
-*/

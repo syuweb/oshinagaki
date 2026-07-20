@@ -1,12 +1,25 @@
 "use client"
-// Foodlistの一覧表示内の個々の項目を表示
+
+/*
+    フードアイテムの表示
+    ＜概要＞
+        フードリストの一覧画面内の個々の項目を表示する。
+    ＜使い方＞
+        <FoodItem
+            key={item.id}
+            item={item}
+        />
+
+        key：フードアイテムのキーとなる値（フードアイテムのID）
+        item：フードアイテム
+*/
 
 import Image from "next/image";
 import { useRouter } from "next/navigation"
-import type { ItemDoc } from "@/lib/item";
+import type { ItemDoc2, Rating } from "@/foodlist/lib/firestoreDoc";
 
 type props = {
-    item: ItemDoc;
+    item: ItemDoc2;
 }
 
 export default function FoodItem({ item }: props) {
@@ -16,6 +29,13 @@ export default function FoodItem({ item }: props) {
     // 評価を★で表示
     const renderStars = (value: number) =>
         "★★★★★☆☆☆☆☆".slice(5 - value, 10 - value);
+
+    const hasRating = (ratings: Rating[]) => {
+        if (ratings[0].score !== 0) return true;
+        if (ratings[1].score !== 0) return true;
+        if (ratings[2].score !== 0) return true;
+        return false;
+    }
 
     return (
         <button
@@ -30,9 +50,9 @@ export default function FoodItem({ item }: props) {
             "
         >
             {/* 画像 */}
-            {item.image?.url ? (
+            {item.images?.[0]?.url ? (
                 <Image
-                    src={item.image.url}    // 画像URL指定
+                    src={item.images[0].url}    // 画像URL指定
                     alt={item.name}         // 読み上げ時のテキスト
                     className="
                         h-[var(--item-height)] // 画像表示の高さ指定
@@ -88,13 +108,13 @@ export default function FoodItem({ item }: props) {
                 )}
 
                 {/* 評価 */}
-                {item.ratings && item.ratings.length > 0 && (
+                {item.ratings && hasRating(item.ratings) && (
                     <div
                         className="
                             flex        // 中身をflexboxレイアウトにする
                             text-left   // テキスト左揃え
                             text-xs     // テキストサイズ小
-                            gap-3       // 評価間のギャップ
+                            gap-3       // 要素間のギャップ
                         "
                     >
                         {item.ratings.map((r, i) => (

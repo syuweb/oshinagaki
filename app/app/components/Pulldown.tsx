@@ -133,6 +133,7 @@ export function PulldownMenu({ children, className }: PulldownMenuProps) {
 
     return (
         <>
+            {/* 開くメニューの裏にオーバレイを表示し、オーバレイをタップしたときにメニューを閉じる */}
             <Overlay
                 clickRef={blockNextClickRef}
                 open={setOpen}
@@ -147,7 +148,7 @@ export function PulldownMenu({ children, className }: PulldownMenuProps) {
                 border                  // 枠表示
                 shadow                  // 影をつける
                 whitespace-nowrap       // テキストの改行を禁止
-                z-[60]                  // Z位置を60に
+                z-[100]                 // Z位置を100に
                 ${className}
             `}
             >

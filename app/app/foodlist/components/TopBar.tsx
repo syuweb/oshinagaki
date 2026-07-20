@@ -51,8 +51,8 @@ export function TopBar() {
                             bg-[var(--half-color)]  // 背景色指定
                         "
                     >
-                        <SidemenuItem onClick={()=>{router.push(`/foodlist`);}}>食事リスト</SidemenuItem>
-                        <SidemenuItem onClick={()=>{router.push(`/dataedit`);}}>データ編集</SidemenuItem>
+                        <SidemenuItem onClick={() => { router.push(`/foodlist`); }}>食事リスト</SidemenuItem>
+                        <SidemenuItem onClick={() => { router.push(`/dataedit`); }}>データ編集</SidemenuItem>
                     </SidemenuMenu>
                 </Sidemenu>
             </div>

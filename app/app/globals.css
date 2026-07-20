@@ -52,6 +52,16 @@ header {
   /* トップバー */
   --topbar-height: 40px;
 
+  /* サブバー */
+  --subbar-height: 40px;
+
+  /* ボトムバー */
+  --bottomBar-height: 40px;
+
   /* アイテム */
   --item-height: 60px;
+
+  /* 画像サイズ */
+  --image-size: 250px;
+
 }
