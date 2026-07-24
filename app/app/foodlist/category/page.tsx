@@ -10,6 +10,8 @@ import CategoryList from "@/foodlist/components/CategoryList"
 import { SetTitle } from "@/components/Title"
 import { getFoodCategories } from "@/foodlist/lib/foodCategory"
 
+export const dynamic = "force-dynamic";
+
 export default async function Home() {              // 中でawaitを使っているため、asyncにする
     const categories = await getFoodCategories();   // データベースからの読み込みに時間がかかるため、awaitを指定
 

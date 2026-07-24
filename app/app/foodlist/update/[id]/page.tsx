@@ -15,6 +15,8 @@ type PageProps = {
     params: Promise<{ id: string }>;    // []のページの引数はPromiseが必要（URLごとに値が変わるため）
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function Home({ params }: PageProps) {
     const { id } = await params;  // 全体をawaitしないと中身にアクセスできない。分割代入が必要
 

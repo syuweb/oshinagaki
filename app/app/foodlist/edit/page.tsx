@@ -12,6 +12,8 @@ import FoodEdit from "@/foodlist/components/FoodEdit";
 import { getItems2 } from "@/foodlist/lib/items2";                 //★旧フォーマット
 import { SetTitle } from "@/components/Title"
 
+export const dynamic = "force-dynamic";
+
 export default async function Home() {      // 中でawaitを使っているため、asyncにする
     const items = await getItems2();         // データベースからの読み込みに時間がかかるため、awaitを指定
 
