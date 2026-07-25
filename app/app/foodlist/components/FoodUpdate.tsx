@@ -154,7 +154,6 @@ export function FoodUpdate({ item, defaultimages }: props) {
 
     /* 更新処理 */
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-        alert("handleSubmit");
         e.preventDefault();
         setError(null);
 

@@ -57,17 +57,14 @@ export default function FoodEdit({ items }: props) {
     }, [selectedId]);
 
     const deleteSelectedItems = async () => {
-        alert(selectedIds.length);
         if (selectedIds.length === 0) return;
 
         const ok = confirm(`選択した ${selectedIds.length} 件を削除しますか？`);
         if (!ok) return;
 
         for (const id of selectedIds) {
-            alert(id);
             const item = items.find(i => i.id === id);
             if (!item) continue;
-            alert(item.id)
             try {
                 // 既存の削除処理を呼ぶ
                 await deleteItem2(item.id);
