@@ -8,6 +8,6 @@
 
 import { redirect } from "next/navigation";
 
-export default function Page() {
-  redirect("/foodlist");            // 当面はfoodlistだけを実装するため、foodlistにリダイレクト
+export default function Home() {
+    redirect("/foodlist");            // 当面はfoodlistだけを実装するため、foodlistにリダイレクト
 }
