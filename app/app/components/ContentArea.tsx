@@ -5,7 +5,7 @@
     ＜概要＞
         画面中央のメインコンテンツ領域を担当する。
         TopBar、SubBar、BottomBarの高さを考慮して、子コンテンツ(children)を正しい位置に表示する。
-    ＜使い方＞　
+    ＜使い方＞
         <Layout children={children} />
 */
 

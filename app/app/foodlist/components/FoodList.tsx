@@ -52,14 +52,14 @@ export default function FoodList({ items }: props) {
     /* プルダウン用メニューアイテムの設定 */
     useSetMenuItems([
         {
-            name: "メニュー追加",
+            name: "アイテム追加",
             onClick: () => {
                 setInitialized(false);
                 router.push(`/foodlist/add`);
             },
         },
         {
-            name: "メニュー編集",
+            name: "アイテム編集",
             onClick: () => { router.push(`/foodlist/edit`); },
         },
         {

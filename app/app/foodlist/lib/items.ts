@@ -18,7 +18,7 @@ type props = {
 */
 
 export async function getItem({ id }: props) {
-    const ref = doc(db, "items", id);   // db:Firebaseインスタンス　"items":コレクション名
+    const ref = doc(db, "items", id);   // db:Firebaseインスタンス "items":コレクション名
     const snap = await getDoc(ref);
 
     if (!snap.exists()) return;     // データがなければエラー

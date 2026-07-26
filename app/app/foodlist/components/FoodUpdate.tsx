@@ -310,7 +310,7 @@ export function FoodUpdate({ item, defaultimages }: props) {
                             font-medium     // フォントの太さ(Weight)を指定(500)
                         "
                     >
-                        メニュー名 <span className="text-red-500">*</span>
+                        アイテム名 <span className="text-red-500">*</span>
                     </label>
                     <div
                         className="
@@ -343,7 +343,7 @@ export function FoodUpdate({ item, defaultimages }: props) {
                             font-medium         // フォントの太さ(Weight)を指定(500)
                         "
                     >
-                        メニュー画像
+                        アイテム画像
                     </label>
                     <div
                         className="

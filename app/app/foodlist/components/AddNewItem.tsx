@@ -27,7 +27,7 @@ import { useSetAction, useGetAction } from "@/components/Action";
 import { useGetCategoryList } from "@/foodlist/components/CategoryList";
 
 export function AddNewItem() {
-    useSetTitle("新しいメニューを登録");    //ページタイトル
+    useSetTitle("新しいアイテムを登録");    //ページタイトル
     const [error, setError] = useState<string | null>(null);
     const [currentImage, setCurrentImage] = useState(0);                // 表示中の画像インデックス
     //const [images, setImages] = useState<PreviewImage[]>([]);
@@ -272,7 +272,7 @@ export function AddNewItem() {
                             font-medium     // フォントの太さ(Weight)を指定(500)
                         "
                     >
-                        メニュー名 <span className="text-red-500">*</span>
+                        アイテム名 <span className="text-red-500">*</span>
                     </label>
                     <div
                         className="
@@ -306,7 +306,7 @@ export function AddNewItem() {
                             font-medium         // フォントの太さ(Weight)を指定(500)
                         "
                     >
-                        メニュー画像
+                        アイテム画像
                     </label>
                     <div
                         className="
@@ -610,7 +610,7 @@ type ItemPropertyContextType = {
 // コンテキスト設定
 const ItemPropertyContext = createContext<ItemPropertyContextType | undefined>(undefined);
 
-// プロバイダ設定　プロバイダで囲んでコンテキストを共有
+// プロバイダ設定 プロバイダで囲んでコンテキストを共有
 export function ItemPropertyProvider({ children, }: Readonly<{ children: React.ReactNode; }>) {
     const [initialized, setInitialized] = useState(false);
     const [name, setName] = useState("");

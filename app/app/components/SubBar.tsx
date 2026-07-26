@@ -37,7 +37,7 @@ type SubBarContextType = {
 // コンテキスト設定
 const SubBarContext = createContext<SubBarContextType | undefined>(undefined);
 
-// プロバイダ設定　プロバイダで囲んでコンテキストを共有
+// プロバイダ設定 プロバイダで囲んでコンテキストを共有
 export function SubBarProvider({ children, }: Readonly<{ children: React.ReactNode; }>) {
     const [subBar, setSubBar] = useState<React.ReactNode>([]);
     const [subBarHeight, setSubBarHeight] = useState(0);

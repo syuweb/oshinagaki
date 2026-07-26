@@ -124,7 +124,7 @@ export default function FoodItem({ item }: props) {
                                     text-yellow-600
                                 "
                             >
-                                {renderStars(r.score)}
+                                {r.name}{renderStars(r.score)}
                             </div>
                         ))}
                     </div>
