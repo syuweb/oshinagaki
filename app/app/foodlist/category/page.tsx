@@ -7,7 +7,7 @@
 */
 
 import CategoryList from "@/foodlist/components/CategoryList"
-import { SetTitle } from "@/components/Title"
+import { SetTitle } from "@/hooks/useTitle"
 import { getFoodCategories } from "@/foodlist/lib/foodCategory"
 
 export const dynamic = "force-dynamic";

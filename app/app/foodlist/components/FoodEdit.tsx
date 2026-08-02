@@ -16,10 +16,10 @@
 import FoodEditItem from "@/foodlist/components/FoodEditItem";
 import type { ItemDoc2 } from "@/foodlist/lib/firestoreDoc";
 import { useRouter } from "next/navigation";
-import { useSetMenuItems } from "@/components/MenuItems";
-import { useState, useMemo, useEffect } from "react";
+import { useSetMenuItems } from "@/hooks/useMenuItems";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import { deleteItem2 } from "@/foodlist/lib/items2";
-import { useSetSubBar } from "@/components/SubBar";
+import { useSetSubBar } from "@/hooks/useSubBar";
 import { useSetBottomBar } from "@/components/BottomBar";
 import { useGetCategoryList } from "@/foodlist/components/CategoryList";
 
@@ -56,7 +56,11 @@ export default function FoodEdit({ items }: props) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedId]);
 
-    const deleteSelectedItems = async () => {
+    const handleTop = useCallback(() => {
+        router.push("/foodlist");
+    }, [router]);
+
+    const deleteSelectedItems = useCallback(async () => {
         if (selectedIds.length === 0) return;
 
         const ok = confirm(`選択した ${selectedIds.length} 件を削除しますか？`);
@@ -76,11 +80,15 @@ export default function FoodEdit({ items }: props) {
         }
 
         /* トップ画面に移動 */
-        router.push("/");
-    }
+        handleTop();
+    }, [selectedIds, items, handleTop]);
 
-    useSetMenuItems(
-        [
+    const handleBack = useCallback(() => {
+        router.back();
+    }, [router]);
+
+    const menuItems = useMemo(
+        () => [
             {
                 name: "全選択",
                 onClick: () => { setSelectedIds(allIds) },
@@ -95,10 +103,12 @@ export default function FoodEdit({ items }: props) {
             },
             {
                 name: "戻る",
-                onClick: () => { router.back() },
+                onClick: handleBack,
             },
-        ], [selectedIds]
+        ], [setSelectedIds, allIds, deleteSelectedItems, handleBack]
     );
+
+    useSetMenuItems(menuItems);
 
     const categoryList = useGetCategoryList();
     const categoryAll = {

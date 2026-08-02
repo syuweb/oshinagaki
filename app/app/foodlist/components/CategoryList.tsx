@@ -16,7 +16,7 @@
         categories：カテゴリーの配列
 */
 
-import { useState, useEffect, useRef, useContext, createContext } from "react";
+import { useState, useEffect, useRef, useContext, createContext, useMemo, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { Icon } from "@/components/Icon"
 import { FoodCategoryDoc } from "@/foodlist/lib/firestoreDoc"
@@ -24,7 +24,7 @@ import { AddFoodCategory, DeleteFoodCategory, saveOrder, UpdateFoodCategory } fr
 import { DndContext, PointerSensor, TouchSensor, useSensor, useSensors, closestCenter, type DragEndEvent } from "@dnd-kit/core";
 import { SortableContext, verticalListSortingStrategy, useSortable, arrayMove } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { useSetMenuItems } from "@/components/MenuItems";
+import { useSetMenuItems } from "@/hooks/useMenuItems";
 import { ClearCategoryFromItems } from "@/foodlist/lib/items2";
 import { getFoodCategories } from "@/foodlist/lib/foodCategory";
 
@@ -59,14 +59,21 @@ export default function CategoryList({ categories: initialCategories }: props) {
     })
   );
 
-  useSetMenuItems(
-    [
+  const handleBack = useCallback(() => {
+    router.back();
+  }, [router]);
+
+  const menuItems = useMemo(
+    () => [
       {
         name: "戻る",
-        onClick: () => { router.back() },
+        onClick: handleBack,
       },
-    ]
+    ],
+    [handleBack]
   );
+
+  useSetMenuItems(menuItems);
 
   // ドラッグ終了時に呼ばれるハンドラ
   function handleDragEnd(event: DragEndEvent) {

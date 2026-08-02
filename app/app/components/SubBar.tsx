@@ -24,8 +24,8 @@
         useSetSubBar, useGetSubBar, useGetSubBarHeightを使う際には"use client"が必要
 */
 
-import { createContext, useState, useContext, useEffect, DependencyList } from "react"
-
+import { useGetSubBar, useGetSubBarHeight, useGetSubBarColor } from "@/hooks/useSubBar";
+/*
 // コンテキストタイプ：サブバーとセットサブバーを共有
 type SubBarContextType = {
     subBar: React.ReactNode;
@@ -62,15 +62,34 @@ export function useGetSubBar() {
 
     return (subBar);
 }
-
+*/
 // サブバー取得（サーバコンポーネントからの呼び出し）
 export function SubBar() {
-    const { subBar } = useSubBar();
+    const subBar = useGetSubBar();
+    const subBarHeight = useGetSubBarHeight();
+    const subBarColor = useGetSubBarColor();
 
-    if (subBar) return subBar;
-    return (<></>);
+    if (subBar) return (
+        <div
+            className="
+                    fixed                       // 画面基準で固定位置
+                    top-[var(--topbar-height)]   // トップバーの下端から
+                    left-0                      // 左端から0px
+                    right-0                     // 右端から0px
+                    flex                        // 中身をflexboxレイアウトにする
+                    items-center                // 縦方向中央揃え
+                    justify-between             // 中身を両端とその間に均等に配置
+                    px-1                        // 左右パディング 0.25rem(4px)
+                    z-[40]                      // z-index       
+                "
+            style={{ height: subBarHeight, backgroundColor: subBarColor }}
+        >
+            {subBar}
+        </div>
+    );
+    return null;
 }
-
+/*
 // サブバー設定（クライアントコンポーネントからの呼び出し）
 export function useSetSubBar(
     node: React.ReactNode = null,
@@ -130,3 +149,4 @@ export function useGetSubBarHeight() {
 
     return (subBarHeight);
 }
+*/

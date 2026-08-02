@@ -52,7 +52,7 @@ export function BottomBarProvider({ children, }: Readonly<{ children: React.Reac
 // コンテキスト（メニューアイテム、セットメニューアイテム）取得関数
 function useBottomBar() {
     const context = useContext(BottomBarContext);
-    if (!context) throw new Error("useSubBar must be used within SubBarProvider");
+    if (!context) throw new Error("useBottomBar must be used within BottomBarProvider");
     return context;
 }
 

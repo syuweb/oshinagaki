@@ -20,8 +20,8 @@ import { useRouter } from "next/navigation";
 import { Icon } from "@/components/Icon";
 import { Pulldown, PulldownButton, PulldownMenu, PulldownItem } from "@/components/Pulldown"
 import { Sidemenu, SidemenuButton, SidemenuMenu, SidemenuItem } from "@/components/Sidemenu"
-import { useGetTitle } from "@/components/Title"
-import { useGetMenuItems } from "@/components/MenuItems"
+import { useGetTitle } from "@/hooks/useTitle"
+import { useGetMenuItems } from "@/hooks/useMenuItems"
 
 export function TopBar() {
     const router = useRouter();
@@ -73,6 +73,16 @@ export function TopBar() {
                         {/*<SidemenuItem onClick={() => { router.push(`/dataedit`); }}>データ編集</SidemenuItem>*/}
                     </SidemenuMenu>
                 </Sidemenu>
+                <button
+                    onClick={() => router.back()}
+                    className={`
+                        flex                // 中身をflexboxレイアウトにする
+                        items-center        // 縦方向中央揃え
+                        justify-center      // 横方向中央揃え
+                    `}
+                >
+                    <Icon name="arrow_back_ios" size={24} />
+                </button>
             </div>
 
             {/* 中央 */}

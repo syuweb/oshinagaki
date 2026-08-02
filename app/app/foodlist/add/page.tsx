@@ -6,7 +6,7 @@
         自動で呼び出されるため使い方は不要。
 */
 
-import { SetTitle } from "@/components/Title"
+import { SetTitle } from "@/hooks/useTitle"
 import { AddNewItem } from "@/foodlist/components/AddNewItem"
 
 export default async function Home() {

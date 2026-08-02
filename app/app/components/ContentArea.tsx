@@ -11,7 +11,7 @@
 
 import type { ReactNode } from "react";
 import { useGetBottomBarHeight } from "@/components/BottomBar";
-import { useGetSubBarHeight } from "@/components/SubBar";
+import { useGetSubBarHeight } from "@/hooks/useSubBar";
 
 export function ContentArea({
     children,

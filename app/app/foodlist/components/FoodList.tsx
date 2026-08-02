@@ -13,13 +13,13 @@
         items：フードアイテムの配列
 */
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import FoodItem from "@/foodlist/components/FoodItem";
 import type { ItemDoc2 } from "@/foodlist/lib/firestoreDoc";
-import { useSetMenuItems } from "@/components/MenuItems";
+import { useSetMenuItems } from "@/hooks/useMenuItems";
 import { useRouter } from "next/navigation";
 import { useSetInitialized } from "@/foodlist/components/AddNewItem";
-import { useSetSubBar } from "@/components/SubBar";
+import { useSetSubBar } from "@/hooks/useSubBar";
 import { useGetCategoryList } from "@/foodlist/components/CategoryList";
 
 type props = {
@@ -50,23 +50,38 @@ export default function FoodList({ items }: props) {
     const setInitialized = useSetInitialized();
 
     /* プルダウン用メニューアイテムの設定 */
-    useSetMenuItems([
-        {
-            name: "アイテム追加",
-            onClick: () => {
-                setInitialized(false);
-                router.push(`/foodlist/add`);
+    const handleAdd = useCallback(() => {
+        setInitialized(false);
+        router.push(`/foodlist/add`);
+    }, [setInitialized, router]);
+
+    const handleEdit = useCallback(() => {
+        router.push(`/foodlist/edit`);
+    }, [router]);
+
+    const handleCategory = useCallback(() => {
+        router.push(`/foodlist/category`);
+    }, [router]);
+
+    const menuItems = useMemo(
+        () => [
+            {
+                name: "アイテム追加",
+                onClick: handleAdd,
             },
-        },
-        {
-            name: "アイテム編集",
-            onClick: () => { router.push(`/foodlist/edit`); },
-        },
-        {
-            name: "カテゴリー編集",
-            onClick: () => { router.push('/foodlist/category'); },
-        },
-    ]);
+            {
+                name: "アイテム編集",
+                onClick: handleEdit,
+            },
+            {
+                name: "カテゴリー編集",
+                onClick: handleCategory,
+            },
+        ],
+        [handleAdd, handleEdit, handleCategory]
+    );
+
+    useSetMenuItems(menuItems);
 
     const categoryList = useGetCategoryList();
     const categoryAll = {

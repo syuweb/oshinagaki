@@ -10,7 +10,7 @@
 
 import FoodEdit from "@/foodlist/components/FoodEdit";
 import { getItems2 } from "@/foodlist/lib/items2";                 //★旧フォーマット
-import { SetTitle } from "@/components/Title"
+import { SetTitle } from "@/hooks/useTitle"
 
 export const dynamic = "force-dynamic";
 

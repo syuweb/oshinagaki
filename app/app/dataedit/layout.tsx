@@ -2,7 +2,7 @@
 // DataEditの共通レイアウト（トップバー表示）
 
 import React from "react";
-import { useSetTitle } from "@/components/Title"
+import { useSetTitle } from "@/hooks/useTitle"
 
 export default function FoodListLayout({
     children,

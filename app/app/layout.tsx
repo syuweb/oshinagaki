@@ -13,7 +13,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import type { ReactNode } from "react";
 import "./globals.css";
 
-import { AppProvider } from "@/components/AppProvider";
+import { AppProvider } from "@/providers/AppProvider";
 import { BottomBar } from "@/components/BottomBar";
 import { ContentArea } from "@/components/ContentArea";
 import { SubBar } from "@/components/SubBar";
@@ -44,13 +44,11 @@ export const metadata: Metadata = {                  // Next.jsが各ページ�
 // 
 // この関数はNext.jsが自動的に呼び出すため、export defaultが必要。
 // 
-export default function RootLayout(
-  {
-    children,                   // このレイアウト配下のページ内容が入る
-  }: Readonly<{                 // 読み取り専用
-    children: ReactNode;        // React要素（ページコンポーネントなど）
-  }>
-) {
+export default function RootLayout({
+  children,                   // このレイアウト配下のページ内容が入る
+}: Readonly<{                 // 読み取り専用
+  children: ReactNode;        // React要素（ページコンポーネントなど）
+}>) {
   return (
     <html lang="ja">
       <body
@@ -60,9 +58,9 @@ export default function RootLayout(
           antialiased             // Tailwind CSSの設定。文字のアンチエイリアスを有効にして文字を滑らかに表示する。
         `}
       >
-      {/* ${geistSans.variable}：GeistフォントをCSS変数として登録。 */}
-      {/* ${geistMono.variable}：Geist MonoフォントをCSS変数として登録。 */}
-      {/* antialiased：Tailwind CSSの設定。文字のアンチエイリアスを有効にして文字を滑らかに表示する。 */}
+        {/* ${geistSans.variable}：GeistフォントをCSS変数として登録。 */}
+        {/* ${geistMono.variable}：Geist MonoフォントをCSS変数として登録。 */}
+        {/* antialiased：Tailwind CSSの設定。文字のアンチエイリアスを有効にして文字を滑らかに表示する。 */}
         {/* アプリ全体で利用するContext Provider。この配下のすべてのコンポーネントでContextの値を利用できる。 */}
         <AppProvider>
           {/* h-[100svh]：ビューポートの高さ100%。svhはスマホブラウザのアドレスバー表示などを考慮した高さ単位。 */}

@@ -12,12 +12,13 @@
         item：表示するフードアイテム
 */
 
+import { useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import { useSetTitle } from "@/components/Title";
+import { useSetTitle } from "@/hooks/useTitle";
 import { ImageSlider } from "@/components/ImageSlider";
 import { ItemDoc2 } from "@/foodlist/lib/firestoreDoc";
 import { RenderDescription } from "@/components/RenderDescription";
-import { useSetMenuItems } from "@/components/MenuItems";
+import { useSetMenuItems } from "@/hooks/useMenuItems";
 import { useSetBottomBar } from "@/components/BottomBar";
 import { useSetInitialized } from "@/foodlist/components/AddNewItem";
 
@@ -35,21 +36,30 @@ export default function FoodDetail({ item, category }: props) {
 
     const setInitialized = useSetInitialized();
 
-    useSetMenuItems(
-        [
+    const handlePushItem = useCallback(() => {
+        setInitialized(false);
+        router.push(`/foodlist/update/${item.id}`);
+    }, [setInitialized, router, item.id]);
+
+    const handleBack = useCallback(() => {
+        router.back();
+    }, [router]);
+
+    const menuItems = useMemo(
+        () => [
             {
                 name: "情報修正",
-                onClick: () => {
-                    setInitialized(false);
-                    router.push(`/foodlist/update/${item.id}`);
-                },
+                onClick: handlePushItem,
             },
             {
                 name: "戻る",
-                onClick: () => { router.back() },
+                onClick: handleBack,
             },
-        ]
+        ],
+        [handlePushItem, handleBack]
     );
+
+    useSetMenuItems(menuItems);
 
     useSetBottomBar(
         <div

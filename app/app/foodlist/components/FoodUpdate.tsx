@@ -15,16 +15,16 @@
 */
 
 import * as exifr from "exifr";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import { useSetTitle } from "@/components/Title";
+import { useSetTitle } from "@/hooks/useTitle";
 import { Icon } from "@/components/Icon";
 import { ImageSlider, PreviewImage } from "@/components/ImageSlider";
 import { ItemDoc2, ItemImage, RatingName } from "@/foodlist/lib/firestoreDoc";
 import { uploadToCloudinary, deleteFromCloudinary } from "@/foodlist/lib/cloudinary";
 import { updateItem2 } from "@/foodlist/lib/items2";
-import { useSetAction, useGetAction } from "@/components/Action";
-import { useSetMenuItems } from "@/components/MenuItems";
+import { useSetAction, useGetAction } from "@/hooks/useAction";
+import { useSetMenuItems } from "@/hooks/useMenuItems";
 import { useSetBottomBar } from "@/components/BottomBar";
 import { useGetCategoryList } from "@/foodlist/components/CategoryList";
 import { useSetInitialized, useGetName, useSetName, useGetCategoryId, useSetCategoryId, useGetDescription, useSetDescription, useGetImages, useSetImages, useGetLastEaten, useSetLastEaten, useGetRatings, useSetRatings, useGetRefresh } from "@/foodlist/components/AddNewItem"
@@ -98,19 +98,25 @@ export function FoodUpdate({ item, defaultimages }: props) {
 
     const categories = useGetCategoryList();
 
-    useSetMenuItems(
-        [
+    const handleBack = useCallback(() => {
+        router.back();
+    }, [router]);
+
+    const menuItems = useMemo(
+        () => [
             {
                 name: "更新",
                 onClick: executeAction,
             },
             {
                 name: "戻る",
-                onClick: () => { router.back() },
+                onClick: handleBack,
             },
         ],
-        [executeAction]
+        [executeAction, handleBack]
     );
+
+    useSetMenuItems(menuItems);
 
     /* ボトムバー設定 */
     useSetBottomBar(

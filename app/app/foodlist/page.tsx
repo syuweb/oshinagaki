@@ -10,7 +10,7 @@
 
 import FoodList from "@/foodlist/components/FoodList";
 import { getItems2 } from "@/foodlist/lib/items2";
-import { SetTitle } from "@/components/Title";
+import { SetTitle } from "@/hooks/useTitle";
 
 export const dynamic = "force-dynamic";
 

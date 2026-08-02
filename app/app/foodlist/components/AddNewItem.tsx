@@ -13,17 +13,17 @@
 */
 
 import * as exifr from "exifr";
-import { useState, useEffect, useRef, createContext, useContext } from "react"
+import { useState, useEffect, useRef, createContext, useContext, useMemo, useCallback } from "react"
 import { useRouter } from "next/navigation";
-import { useSetTitle } from "@/components/Title";
+import { useSetTitle } from "@/hooks/useTitle";
 import { Icon } from "@/components/Icon";
 import { ImageSlider, PreviewImage } from "@/components/ImageSlider";
 import { ItemDoc2, ItemImage, Rating, RatingName, RATING_NAMES } from "@/foodlist/lib/firestoreDoc";
 import { uploadToCloudinary } from "@/foodlist/lib/cloudinary";
 import { addItem2 } from "@/foodlist/lib/items2";
 import { useSetBottomBar } from "@/components/BottomBar";
-import { useSetMenuItems } from "@/components/MenuItems";
-import { useSetAction, useGetAction } from "@/components/Action";
+import { useSetMenuItems } from "@/hooks/useMenuItems"
+import { useSetAction, useGetAction } from "@/hooks/useAction";
 import { useGetCategoryList } from "@/foodlist/components/CategoryList";
 
 export function AddNewItem() {
@@ -76,19 +76,25 @@ export function AddNewItem() {
 
     const categories = useGetCategoryList();
 
-    useSetMenuItems(
-        [
+    const handleBack = useCallback(() => {
+        router.back();
+    }, [router]);
+
+    const menuItems = useMemo(
+        () => [
             {
                 name: "登録",
                 onClick: executeAction,
             },
             {
                 name: "戻る",
-                onClick: () => { router.back() },
+                onClick: handleBack,
             },
         ],
-        [executeAction]
+        [executeAction, handleBack]
     );
+
+    useSetMenuItems(menuItems);
 
     /* ボトムバー設定 */
     useSetBottomBar(
