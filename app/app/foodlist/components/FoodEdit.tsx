@@ -19,9 +19,10 @@ import { useRouter } from "next/navigation";
 import { useSetMenuItems } from "@/hooks/useMenuItems";
 import { useState, useMemo, useEffect, useCallback } from "react";
 import { deleteItem2 } from "@/foodlist/lib/items2";
-import { useSetSubBar } from "@/hooks/useSubBar";
-import { useSetBottomBar } from "@/components/BottomBar";
+import { useSetSubBar, useSetSubBarHeight } from "@/hooks/useSubBar";
+import { useSetBottomBar, useSetBottomBarHeight } from "@/hooks/useBottomBar";
 import { useGetCategoryList } from "@/foodlist/components/CategoryList";
+import { SUB_BAR_HEIGHT, BOTTOM_BAR_HEIGHT } from "@/constants/layoutConstant"
 
 type props = {
     items: ItemDoc2[];
@@ -129,7 +130,7 @@ export default function FoodEdit({ items }: props) {
     ], [categoryList]);
 
     /* サブバー設定 */
-    useSetSubBar(
+    const subBar = useMemo(() => (
         <div
             className="
                     fixed
@@ -163,11 +164,14 @@ export default function FoodEdit({ items }: props) {
                     );
                 })}
             </div>
-        </div>,
-        [selectedId, categoryList]
-    );
+        </div>
+    ), [categories, selectedId]);
 
-    useSetBottomBar(
+    useSetSubBar(subBar);
+    useSetSubBarHeight(SUB_BAR_HEIGHT);
+
+    /* ボトムバー設定 */
+    const bottomBar = useMemo(() => (
         <div
             className="
                     fixed
@@ -218,7 +222,7 @@ export default function FoodEdit({ items }: props) {
             </button>
             <button
                 type="button"
-                onClick={() => router.back()}        // foodlistに戻る
+                onClick={() => handleBack}        // foodlistに戻る
                 className="
                             flex-1          // 自身のwidth、またはheightのサイズを無視して伸び縮みする
                             border          // 枠表示
@@ -229,9 +233,11 @@ export default function FoodEdit({ items }: props) {
             >
                 戻る
             </button>
-        </div>,
-        [selectedIds, allIds]
-    );
+        </div>
+    ), [allIds, deleteSelectedItems, handleBack]);
+
+    useSetBottomBar(bottomBar);
+    useSetBottomBarHeight(BOTTOM_BAR_HEIGHT);
 
     if (!items || items.length === 0) return null;
 
@@ -239,7 +245,7 @@ export default function FoodEdit({ items }: props) {
         <>
             <div
                 className="
-                    pb-[var(--subbar-height)]
+                    pb-[var(--subBar-height)]
                     flex flex-col       //flexboxレイアウトにして縦に並べる
                     gap-3               // アイテム間のギャップ
                 "

@@ -14,15 +14,15 @@
 import type { ReactNode } from "react";
 
 import { ActionProvider } from "@/providers/ActionProvider";
-import { BottomBarProvider } from "@/components/BottomBar";
+import { BottomBarProvider } from "@/providers/BottomBarProvider";
 import { MenuItemsProvider } from "@/providers/MenuItemsProvider";
 import { SubBarProvider } from "@/providers/SubBarProvider";
 import { TitleProvider } from "@/providers/TitleProvider";
 
 export function AppProvider({
-    children
+    children,
 }: Readonly<{
-    children: ReactNode
+    children: ReactNode;
 }>) {
     return (
         <MenuItemsProvider>                     {/* プルダウンメニューのメニューリストを管理するContext */}

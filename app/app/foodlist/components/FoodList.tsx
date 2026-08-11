@@ -19,8 +19,9 @@ import type { ItemDoc2 } from "@/foodlist/lib/firestoreDoc";
 import { useSetMenuItems } from "@/hooks/useMenuItems";
 import { useRouter } from "next/navigation";
 import { useSetInitialized } from "@/foodlist/components/AddNewItem";
-import { useSetSubBar } from "@/hooks/useSubBar";
+import { useSetSubBar, useSetSubBarHeight } from "@/hooks/useSubBar";
 import { useGetCategoryList } from "@/foodlist/components/CategoryList";
+import { SUB_BAR_HEIGHT } from "@/constants/layoutConstant";
 
 type props = {
     items: ItemDoc2[];
@@ -102,7 +103,7 @@ export default function FoodList({ items }: props) {
     ], [categoryList]);
 
     /* サブバー設定 */
-    useSetSubBar(
+    const subBar = useMemo(() => (
         <div
             className="
                     fixed
@@ -120,7 +121,7 @@ export default function FoodList({ items }: props) {
                             key={cat.id}
                             onClick={() => setSelectedId(cat.id)}
                             className={`
-                                min-h-[37px]
+                                min-h-[36px]
                                 px-4
                                 text-base
                                 rounded-t-md
@@ -129,16 +130,18 @@ export default function FoodList({ items }: props) {
                                     ? "bg-white border-gray-200 border-b-white text-black z-10"
                                     : "bg-[var(--grayout-color)] border-transparent text-gray-500 mt-1"
                                 }
-              `}
+                            `}
                         >
                             {cat.name}
                         </button>
                     );
                 })}
             </div>
-        </div>,
-        [selectedId, categoryList]
-    );
+        </div>
+    ), [categories, selectedId]);
+
+    useSetSubBar(subBar);
+    useSetSubBarHeight(SUB_BAR_HEIGHT);
 
     if (!displayItems || displayItems.length === 0) return null;
 

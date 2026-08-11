@@ -19,15 +19,16 @@ import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useSetTitle } from "@/hooks/useTitle";
 import { Icon } from "@/components/Icon";
-import { ImageSlider, PreviewImage } from "@/components/ImageSlider";
+import { ImageSlider, PreviewImage } from "@/foodlist/components/ImageSlider";
 import { ItemDoc2, ItemImage, RatingName } from "@/foodlist/lib/firestoreDoc";
 import { uploadToCloudinary, deleteFromCloudinary } from "@/foodlist/lib/cloudinary";
 import { updateItem2 } from "@/foodlist/lib/items2";
 import { useSetAction, useGetAction } from "@/hooks/useAction";
 import { useSetMenuItems } from "@/hooks/useMenuItems";
-import { useSetBottomBar } from "@/components/BottomBar";
+import { useSetBottomBar, useSetBottomBarHeight } from "@/hooks/useBottomBar";
 import { useGetCategoryList } from "@/foodlist/components/CategoryList";
 import { useSetInitialized, useGetName, useSetName, useGetCategoryId, useSetCategoryId, useGetDescription, useSetDescription, useGetImages, useSetImages, useGetLastEaten, useSetLastEaten, useGetRatings, useSetRatings, useGetRefresh } from "@/foodlist/components/AddNewItem"
+import { BOTTOM_BAR_HEIGHT } from "@/constants/layoutConstant";
 
 type props = {
     item: ItemDoc2;
@@ -119,7 +120,7 @@ export function FoodUpdate({ item, defaultimages }: props) {
     useSetMenuItems(menuItems);
 
     /* ボトムバー設定 */
-    useSetBottomBar(
+    const bottomBar = useMemo(() => (
         <div
             className="
                             px-8        // 横方向パディング8px
@@ -142,7 +143,7 @@ export function FoodUpdate({ item, defaultimages }: props) {
 
             <button
                 type="button"
-                onClick={() => router.push("/foodlist")}        // foodlistに戻る
+                onClick={() => handleBack}        // foodlistに戻る
                 className="
                             flex-1          // 自身のwidth、またはheightのサイズを無視して伸び縮みする
                             border          // 枠表示
@@ -153,9 +154,11 @@ export function FoodUpdate({ item, defaultimages }: props) {
             >
                 戻る
             </button>
-        </div>,
-        [executeAction]
-    )
+        </div>
+    ), [executeAction, handleBack]);
+
+    useSetBottomBar(bottomBar);
+    useSetBottomBarHeight(BOTTOM_BAR_HEIGHT);
 
 
     /* 更新処理 */

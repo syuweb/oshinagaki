@@ -15,11 +15,11 @@
 import { useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useSetTitle } from "@/hooks/useTitle";
-import { ImageSlider } from "@/components/ImageSlider";
+import { ImageSlider } from "@/foodlist/components/ImageSlider";
 import { ItemDoc2 } from "@/foodlist/lib/firestoreDoc";
-import { RenderDescription } from "@/components/RenderDescription";
+import { RenderDescription } from "@/foodlist/components/RenderDescription";
 import { useSetMenuItems } from "@/hooks/useMenuItems";
-import { useSetBottomBar } from "@/components/BottomBar";
+import { useSetBottomBar } from "@/hooks/useBottomBar";
 import { useSetInitialized } from "@/foodlist/components/AddNewItem";
 
 type props = {

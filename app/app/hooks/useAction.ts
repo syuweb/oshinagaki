@@ -11,8 +11,8 @@
             const executeAction = useGetAction();
 */
 
-import { useContext, useEffect } from "react";
 import type { RefObject } from "react";
+import { useContext, useEffect } from "react";
 
 import { ActionContext } from "@/providers/ActionProvider";
 

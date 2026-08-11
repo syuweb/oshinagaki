@@ -50,13 +50,15 @@ header {
   --half-color: var(--color-gray-100);
 
   /* トップバー */
-  --topbar-height: 40px;
+  --topBar-height: 40px;
 
   /* サブバー */
-  --subbar-height: 40px;
+  --subBar-height: 40px;
+  --subBar-bgColor: white;
 
   /* ボトムバー */
   --bottomBar-height: 40px;
+  --bottomBar-bgColor: white;
 
   /* アイテム */
   --item-height: 60px;

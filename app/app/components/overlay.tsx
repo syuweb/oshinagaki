@@ -2,39 +2,61 @@
     オーバーレイ
     ＜概要＞
         オーバーレイを実装する。
-        半透明なフィルターで画面全体を覆い、その下の画面の操作ができないようにする。
-        オーバーレイよりも上に表示したものだけが操作できるようにするときに使用する。
-        z位置は50。
+        画面上に半透明のフィルターを表示し、その下にある画面を操作できないようにする。
+        オーバーレイより上（z-indexが大きい）に表示された要素だけを操作可能にしたい場合に使用する。
+        z-index：80
     ＜使い方＞
         <Overlay
-            clickRef={blockNextClickRef}
-            open={setOpen}
+            blockNextClickRef={blockNextClickRef}
+            setOpen={setOpen}
         />
 
-        clickRef：オーバーレイがクリックされた(clickRef.current=true)ことを通知する。
-        open：オーバーレイがクリックされたときの動作を指定する。
+        blockNextClickRef：オーバーレイがクリックされたことを呼び出し元に通知するためのRef。
+                          PointerDown時にcurrentをtrueに設定する。
+        setOpen：オーバーレイがクリックされたときに呼び出す関数。
+                 falseを渡して、表示中のメニューなどを閉じる。
 */
 
-type props = {
-    clickRef: React.RefObject<boolean>;
-    open: (b: boolean) => void;
-}
+import type { RefObject } from "react";
 
-export function Overlay({ clickRef, open }: props) {
+type Props = {
+    // オーバーレイがクリックされたことを通知するRef
+    blockNextClickRef: RefObject<boolean>;
+
+    // オーバーレイがクリックされたときに呼び出す関数
+    // falseを渡してメニューなどを閉じる
+    setOpen: (b: boolean) => void;
+};
+
+export function Overlay({
+    blockNextClickRef,
+    setOpen,
+}: Props) {
     return (
+        // fixed：画面に対して固定位置で表示
+        // top-[var(--topBar-height)]：TopBarと重ならないように上端をずらす
+        // right-0：右端まで広げる
+        // bottom-0：下端まで広げる
+        // left-0：左端まで広げる
+        // z-[80]：z-indexを80に設定
+        // bg-black/20：黒色を20%の不透明度で表示
+        // onPointerDown：押した瞬間に発生するイベント
+        // e：Reactから渡されるイベントオブジェクト。今回の場合、Pointer Eventに関する情報を持つ
         <div
             className="
-                    fixed                       // 描画位置固定
-                    inset-0                     // 上下左右のパディングを0にする（画面いっぱいになる）
-                    top-[var(--topbar-height)]  // トップバーと重ならないように画面上部をパディング
-                    z-[80]                      // z位置を50に
-                    bg-black/20                 // 黒色を20%の透明度で表示
-                "
+                fixed top-[var(--topBar-height)] right-0 bottom-0 left-0
+                bg-black/20
+                z-[80]
+            "
             onPointerDown={(e) => {
                 e.preventDefault();
 
-                clickRef.current = true;    //次のclickをブロック（iPhoneタップではPointerDownの後にClickが発生）
-                open(false);                //メニューを閉じる（メニュー外タップ）
+                // PointerDownの後に発生するClickをブロックするためのフラグを設定
+                // （iPhoneなどではPointerDownの後にClickが発生するため）
+                blockNextClickRef.current = true;
+
+                // メニューなどを閉じる
+                setOpen(false);
             }}
         />
     );

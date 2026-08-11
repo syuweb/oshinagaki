@@ -2,15 +2,21 @@
 
 /*
     コンテンツ領域表示
+
     ＜概要＞
         画面中央のメインコンテンツ領域を担当する。
-        TopBar、SubBar、BottomBarの高さを考慮して、子コンテンツ(children)を正しい位置に表示する。
+        
+        TopBar、SubBar、BottomBarは画面上・下に固定表示されるため、
+        子コンテンツ(children)がこれらのバーと重ならないように、
+        それぞれの高さを考慮して余白を設定する。
+
     ＜使い方＞
-        <Layout children={children} />
+        ContentAreaで画面のメインコンテンツを囲む。
 */
 
 import type { ReactNode } from "react";
-import { useGetBottomBarHeight } from "@/components/BottomBar";
+
+import { useGetBottomBarHeight } from "@/hooks/useBottomBar";
 import { useGetSubBarHeight } from "@/hooks/useSubBar";
 
 export function ContentArea({
@@ -20,51 +26,36 @@ export function ContentArea({
 }>) {
 
     // SubBarの現在の高さをContextから取得
-    // 例：カテゴリタブなどが表示されている場合、その高さ分だけ下げる
+    // SubBarが表示されていない場合は0になる
     const subBarHeight = useGetSubBarHeight();
 
-    // BottomBarの高さをContextから取得
-    // 画面下部固定バーとコンテンツが重ならないようにする
+    // BottomBarの現在の高さをContextから取得
+    // BottomBarが表示されていない場合は0になる
     const bottomBarHeight = useGetBottomBarHeight();
 
-
     return (
+        // flex-1：親のFlexレイアウト内で、ContentAreaを利用可能な領域いっぱいに広げる
+        //          ※ fixed要素はFlexレイアウトの計算対象外
+        //          　 余白で表示領域を指定しているが、エリアの大きさを指定する必要がある
+        //          　 エリア領域と表示領域は同じでなくていい
+        // overflow-auto：コンテンツが領域を超えた場合だけスクロールバーを表示する
         <main
             className="
                 flex-1
-
-                // 下部固定バー分の余白を確保
-                // （ただしstyle側のpaddingBottomで上書きされるため不要なら削除可能）
-                pb-[var(--bottombar-height)]
-
-                // コンテンツが領域を超えた場合だけスクロールバーを表示
                 overflow-auto
             "
-
             style={{
-                // 上部固定バー分の余白を設定
-                //
-                // TopBarは固定表示されているため、
-                // 通常のレイアウトではその下にコンテンツが流れ込んでしまう。
-                //
-                // そこで
-                //   TopBarの高さ
-                // + SubBarの高さ
-                //
-                // 分だけpadding-topを確保する。
-                paddingTop: `calc(var(--topbar-height) + ${subBarHeight}px)`,
+                // TopBar + SubBarの高さ分だけ上側に余白を確保する
+                // 固定表示されているバーとコンテンツが重ならないようにする
+                paddingTop: `calc(var(--topBar-height) + ${subBarHeight})`,
 
-                // 下部固定バー分の余白を設定
-                //
-                // BottomBarがposition: fixedの場合、
-                // コンテンツの最後の部分が隠れないようにする。
-                paddingBottom: bottomBarHeight
+                // BottomBarの高さ分だけ下側に余白を確保する
+                // コンテンツの最後の部分がBottomBarに隠れないようにする
+                paddingBottom: bottomBarHeight,
             }}
         >
-
             {/* 呼び出し元から渡された画面内容を表示 */}
             {children}
-
         </main>
     );
 }

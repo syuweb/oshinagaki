@@ -1,17 +1,17 @@
 "use client"
 
 /*
-    メニューアイテム
+    メニューアイテムプロバイダ
     ＜概要＞
-        メニューのアイテムリストを設定・取得する
+        メニューのアイテムリストを設定・取得するコンテキストプロバイダ
     ＜使い方＞
         <MenuItemsProvider>
             この中でメニューアイテム設定、メニューアイテム取得を実行
         </MenuItemsProvider>
 */
 
-import { useState, createContext } from "react"
 import type { ReactNode } from "react";
+import { useState, createContext } from "react"
 
 // メニューアイテムの型定義
 // メニュー1件分がどんなデータを持つかを定義する
@@ -30,8 +30,8 @@ type MenuItemsContextType = {
 }
 
 // Contextを作成
-export const MenuItemsContext = createContext<MenuItemsContextType | undefined>(undefined);
 // createContext<contextの型>(初期値)：contextの型は上で定義したデータ型。初期値をundefinedにするため、| undefinedをつける。
+export const MenuItemsContext = createContext<MenuItemsContextType | undefined>(undefined);
 
 // プロバイダ設定
 // MenuItemsProviderというReactコンポーネントを作る。
@@ -43,10 +43,10 @@ export function MenuItemsProvider({
     children: ReactNode;
 }>) {
     // メニュー項目一覧をstateとして管理
-    const [items, setItems] = useState<MenuItem[]>([]);
     // const [状態, 状態更新関数] = useState<型>(初期値);
     // 型：MenuItem[]　メニュー項目の配列
     // 初期値：[]　空配列
+    const [items, setItems] = useState<MenuItem[]>([]);
 
     return (
         <MenuItemsContext.Provider value={{ items, setItems }}>

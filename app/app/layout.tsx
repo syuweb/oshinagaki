@@ -13,11 +13,11 @@ import { Geist, Geist_Mono } from "next/font/google";
 import type { ReactNode } from "react";
 import "./globals.css";
 
-import { AppProvider } from "@/providers/AppProvider";
 import { BottomBar } from "@/components/BottomBar";
 import { ContentArea } from "@/components/ContentArea";
 import { SubBar } from "@/components/SubBar";
 import { TopBar } from "@/components/TopBar";
+import { AppProvider } from "@/providers/AppProvider";
 
 // Geistフォントの設定
 const geistSans = Geist({
@@ -51,16 +51,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja">
+      {/* ${geistSans.variable}：GeistフォントをCSS変数として登録。 */}
+      {/* ${geistMono.variable}：Geist MonoフォントをCSS変数として登録。 */}
+      {/* antialiased：Tailwind CSSの設定。文字のアンチエイリアスを有効にして文字を滑らかに表示する。 */}
       <body
         className={`
-          ${geistSans.variable}   // GeistフォントをCSS変数として登録。
-          ${geistMono.variable}   // Geist MonoフォントをCSS変数として登録。
-          antialiased             // Tailwind CSSの設定。文字のアンチエイリアスを有効にして文字を滑らかに表示する。
+          ${geistSans.variable}
+          ${geistMono.variable}
+          antialiased
         `}
       >
-        {/* ${geistSans.variable}：GeistフォントをCSS変数として登録。 */}
-        {/* ${geistMono.variable}：Geist MonoフォントをCSS変数として登録。 */}
-        {/* antialiased：Tailwind CSSの設定。文字のアンチエイリアスを有効にして文字を滑らかに表示する。 */}
         {/* アプリ全体で利用するContext Provider。この配下のすべてのコンポーネントでContextの値を利用できる。 */}
         <AppProvider>
           {/* h-[100svh]：ビューポートの高さ100%。svhはスマホブラウザのアドレスバー表示などを考慮した高さ単位。 */}
@@ -69,8 +69,7 @@ export default function RootLayout({
           <div
             className="
               h-[100svh]
-              flex
-              flex-col
+              flex flex-col
             "
           >
             {/* 共通トップバー表示。サイドメニュー、タイトル、プルダウンメニューを表示する。中身は各ページで指定する。 */}

@@ -33,7 +33,9 @@ export function useGetTitle() {
 }
 
 // 指定したタイトルをContextへ設定するフック
-export function useSetTitle(title: string) {
+export function useSetTitle(
+    title: string,
+) {
     // Contextから更新関数を取得
     const { setTitle } = useTitle();
 

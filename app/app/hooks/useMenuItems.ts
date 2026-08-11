@@ -30,10 +30,8 @@ import { useContext, useEffect } from "react"
 
 import { MenuItem, MenuItemsContext } from "@/providers/MenuItemsProvider";
 
-/*
-    メニューアイテム取得用Hook
-    コンポーネントからはContextの存在を意識せず、現在のメニュー一覧だけ取得できる
-*/
+// メニューアイテム取得用Hook
+// コンポーネントからはContextの存在を意識せず、現在のメニュー一覧だけ取得できる
 export function useGetMenuItems() {
     // Contextからitemsだけ取り出す
     const { items } = useMenuItems();
@@ -42,42 +40,34 @@ export function useGetMenuItems() {
     return (items);
 }
 
-/*
-    メニューアイテム設定用Hook
-    useEffectを利用して、レンダー完了後に MenuItemsProviderのメニュー一覧を更新する
-    itemsはuseMemoなどで参照を安定させて渡すことを想定している
-*/
+// メニューアイテム設定用Hook
+// useEffectを利用して、レンダー完了後に MenuItemsProviderのメニュー一覧を更新する
+// itemsはuseMemoなどで参照を安定させて渡すことを想定している
+
 export function useSetMenuItems(
     items: MenuItem[]
 ) {
     // Contextから状態更新関数を取得
     const { setItems } = useMenuItems();
 
-    /*
-        レンダー完了後にメニュー一覧を更新する。
-        レンダー中にsetItemsを呼ぶと、 ReactのState更新エラーになる可能性があるため、 useEffect内で実行している。
-        itemsまたはsetItemsの参照が変わったときのみ 再実行される。
-    */
+    // レンダー完了後にメニュー一覧を更新する。
+    // レンダー中にsetItemsを呼ぶと、 ReactのState更新エラーになる可能性があるため、 useEffect内で実行している。
+    // itemsまたはsetItemsの参照が変わったときのみ 再実行される。
     useEffect(() => {
         setItems(items)
     }, [items, setItems]);
 }
 
-/*
-    MenuItemsContextから値を取得する共通関数
-    MenuItemsContextには
-        - items       : 現在のメニューアイテム一覧
-        - setItems    : メニューアイテムを更新する関数
-    が保持されている想定
-    useContextはProviderの外で呼ぶとundefinedになるため、
-    利用場所をチェックしている
-*/
+// MenuItemsContextから値を取得する共通関数
+// useContextはProviderの外で呼ぶとundefinedになるため、利用場所をチェックしている
 function useMenuItems() {
     // MenuItemsProviderが提供しているContextの値を取得
     const context = useContext(MenuItemsContext);
 
     // Provider配下で使用されていない場合はエラー
-    if (!context) throw new Error("useGetMenuItems/useSetMenuItems must be used within MenuItemsProvider");
+    if (!context) {
+        throw new Error("useGetMenuItems/useSetMenuItems must be used within MenuItemsProvider");
+    }
 
     // items, setItemsを返す
     return context;

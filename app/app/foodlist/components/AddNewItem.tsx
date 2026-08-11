@@ -17,14 +17,15 @@ import { useState, useEffect, useRef, createContext, useContext, useMemo, useCal
 import { useRouter } from "next/navigation";
 import { useSetTitle } from "@/hooks/useTitle";
 import { Icon } from "@/components/Icon";
-import { ImageSlider, PreviewImage } from "@/components/ImageSlider";
+import { ImageSlider, PreviewImage } from "@/foodlist/components/ImageSlider";
 import { ItemDoc2, ItemImage, Rating, RatingName, RATING_NAMES } from "@/foodlist/lib/firestoreDoc";
 import { uploadToCloudinary } from "@/foodlist/lib/cloudinary";
 import { addItem2 } from "@/foodlist/lib/items2";
-import { useSetBottomBar } from "@/components/BottomBar";
+import { useSetBottomBar, useSetBottomBarHeight } from "@/hooks/useBottomBar";
 import { useSetMenuItems } from "@/hooks/useMenuItems"
 import { useSetAction, useGetAction } from "@/hooks/useAction";
 import { useGetCategoryList } from "@/foodlist/components/CategoryList";
+import { BOTTOM_BAR_HEIGHT } from "@/constants/layoutConstant";
 
 export function AddNewItem() {
     useSetTitle("新しいアイテムを登録");    //ページタイトル
@@ -97,7 +98,7 @@ export function AddNewItem() {
     useSetMenuItems(menuItems);
 
     /* ボトムバー設定 */
-    useSetBottomBar(
+    const bottomBar = useMemo(() => (
         <div
             className="
                         px-8        // 横方向パディング8px
@@ -120,7 +121,7 @@ export function AddNewItem() {
 
             <button
                 type="button"
-                onClick={() => router.back()}
+                onClick={() => handleBack}
                 className="
                             flex-1          // 自身のwidth、またはheightのサイズを無視して伸び縮みする
                             border          // 枠表示
@@ -131,9 +132,11 @@ export function AddNewItem() {
             >
                 戻る
             </button>
-        </div>,
-        [executeAction]
-    )
+        </div>
+    ), [executeAction, handleBack]);
+
+    useSetBottomBar(bottomBar);
+    useSetBottomBarHeight(BOTTOM_BAR_HEIGHT);
 
     /* 追加処理 */
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
